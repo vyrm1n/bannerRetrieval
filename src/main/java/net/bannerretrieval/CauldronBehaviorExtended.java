@@ -3,6 +3,7 @@ package net.bannerretrieval;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -37,12 +38,12 @@ public interface CauldronBehaviorExtended {
         } else if (player.getInventory().add(shieldItemStack)) {
             player.inventoryMenu.sendAllDataToRemote();
         } else {
-            player.drop(shieldItemStack, false);
+            player.drop(shieldItemStack, false, Prediction.SERVER_ONLY);
         }
         if (player.getInventory().add(bannerItemStack)) {
             player.inventoryMenu.sendAllDataToRemote();
         } else {
-            player.drop(bannerItemStack, false);
+            player.drop(bannerItemStack, false, Prediction.SERVER_ONLY);
         }
 
         player.awardStat(Stats.USE_CAULDRON);
@@ -51,56 +52,8 @@ public interface CauldronBehaviorExtended {
     };
 
     private static Item bannerItemFromColor(DyeColor color) {
-        switch (color) {
-            case RED -> {
-                return Items.RED_BANNER;
-            }
-            case ORANGE -> {
-                return Items.ORANGE_BANNER;
-            }
-            case YELLOW -> {
-                return Items.YELLOW_BANNER;
-            }
-            case LIME -> {
-                return Items.LIME_BANNER;
-            }
-            case GREEN -> {
-                return Items.GREEN_BANNER;
-            }
-            case CYAN -> {
-                return Items.CYAN_BANNER;
-            }
-            case LIGHT_BLUE -> {
-                return Items.LIGHT_BLUE_BANNER;
-            }
-            case BLUE -> {
-               return Items.BLUE_BANNER;
-            }
-            case MAGENTA -> {
-                return Items.MAGENTA_BANNER;
-            }
-            case PURPLE -> {
-                return Items.PURPLE_BANNER;
-            }
-            case PINK -> {
-                return Items.PINK_BANNER;
-            }
-            case BROWN -> {
-                return Items.BROWN_BANNER;
-            }
-            case WHITE -> {
-                return Items.WHITE_BANNER;
-            }
-            case LIGHT_GRAY -> {
-                return Items.LIGHT_GRAY_BANNER;
-            }
-            case GRAY -> {
-                return Items.GRAY_BANNER;
-            }
-            case BLACK -> {
-                return Items.BLACK_BANNER;
-            }
-        }
-        return Items.PURPLE_BANNER;
+        // Individual Items.*_BANNER constants were replaced by a single ColorCollection in 26.3.
+        Item banner = Items.BANNER.pick(color);
+        return banner != null ? banner : Items.BANNER.purple();
     }
 }

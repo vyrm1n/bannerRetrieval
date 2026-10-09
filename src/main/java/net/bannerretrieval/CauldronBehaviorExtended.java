@@ -14,13 +14,15 @@ import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
 public interface CauldronBehaviorExtended {
     CauldronInteraction WASH_SHIELD = (state, world, pos, player, hand, stack) -> {
-        BannerPatternLayers bannerPatternsComponent = stack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
         DyeColor bannerColor = stack.get(DataComponents.BASE_COLOR);
-        assert bannerColor != null;
-
-        if (bannerPatternsComponent.layers().isEmpty()) {
+        if (bannerColor == null) {
+            // Plain, undyed shield: there's no banner (patterned or color-only) to wash off.
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
+        // Falls back to BannerPatternLayers.EMPTY for a color-only banner (one with no loom
+        // patterns applied), which is still valid to wash off: it just yields a plain banner back.
+        BannerPatternLayers bannerPatternsComponent = stack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY);
+
         if (world.isClientSide()) return InteractionResult.SUCCESS;
 
         ItemStack shieldItemStack = stack.copy();

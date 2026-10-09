@@ -11,7 +11,8 @@ from their shields by using them on a cauldron.
 
 ## Features
 
-- Adds the ability to remove banners from shields
+- Adds the ability to remove banners from shields, including a plain
+  (color-only, no loom pattern) banner
 - **WARNING**: After removing the banner from the shield, the banner will only
   have its original pattern and color. All other components like a custom name
   (in the case of the ominous banner its color) are lost!
